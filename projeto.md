@@ -8,8 +8,8 @@ camera = cv2.VideoCapture(1)#pega o feed da camera do computador
 orb = cv2.ORB()# cria uma instancia ORB
 bf = cv2.BFMatcher(cv2.NORM_HAMMING, crossCheck=True)# usa o brute force keypoint descriptor com o metodo hamming
 
-imgTrainColor=cv2.imread('modeloinsper.jpg')#lendo a imagem modelo
-imgTrainGray = cv2.cvtColor(imgTrainColor, cv2.COLOR_BGR2GRAY)# coloca a imagem em branco e preto
+imgoriginalColor=cv2.imread('modeloinsper.jpg')#lendo a imagem modelo
+imgTrainGray = cv2.cvtColor(imgoriginalColor, cv2.COLOR_BGR2GRAY)# coloca a imagem em branco e preto
 
 kpTrain = orb.detect(imgTrainGray,None)# pega os keypoints da imagem original
 kpTrain, desTrain = orb.compute(imgTrainGray, kpTrain)# computa todos os descriptors dos keypoints detectados
@@ -29,14 +29,14 @@ while True:
 
     if firsttime==True: # coloca um tamanho para as imagens sendo comparadas para depois serem mostradas para o usuario
         h1, w1 = imgCamColor.shape[:2]
-        h2, w2 = imgTrainColor.shape[:2]
+        h2, w2 = imgoriginalColor.shape[:2]
         nWidth = w1+w2 
         nHeight = max(h1, h2)
         hdif = (h1-h2)/2
         firsttime=False
        
     result = np.zeros((nHeight, nWidth, 3), np.uint8)
-    result[hdif:hdif+h2, :w2] = imgTrainColor # pega os resultados das duas imagens em cores
+    result[hdif:hdif+h2, :w2] = imgoriginalColor # pega os resultados das duas imagens em cores
     result[:h1, w2:w1+w2] = imgCamColor
 
     for i in range(len(matches)):
